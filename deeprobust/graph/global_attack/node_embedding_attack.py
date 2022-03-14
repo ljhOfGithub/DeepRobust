@@ -125,9 +125,9 @@ class NodeEmbeddingAttack(BaseAttack):
         if seed is not None:
             np.random.seed(seed)
         deg = np.where(adj.sum(1).A1 == 1)[0]
-        hiddeen = np.column_stack(
-            (np.arange(n_nodes), np.fromiter(map(np.random.choice, adj.tolil().rows), dtype=np.int32)))
-
+        # hiddeen = np.column_stack(
+        #     (np.arange(n_nodes), np.fromiter(map(np.random.choice, adj.tolil().rows), dtype=np.int32)))
+        hiddeen = np.column_stack((np.arange(n_nodes),np.fromiter(map(np.random.choice, adj.toarray()), dtype=np.int32)))
         adj_hidden = edges_to_sparse(hiddeen, adj.shape[0])
         adj_hidden = adj_hidden.maximum(adj_hidden.T)
 
