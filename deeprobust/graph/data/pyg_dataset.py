@@ -182,7 +182,7 @@ class AmazonPyg(Amazon):
     """
 
     def __init__(self, root, name, transform=None, pre_transform=None, **kwargs):
-        path = osp.join(root, 'pygdata', name)
+        path = osp.join(root, 'pygdata', name)#在dpr中root是D:\\ether\\tmp\\，name是pygdata\\computers\\Computers\\processed\\data.pt
         super(AmazonPyg, self).__init__(path, name, transform, pre_transform)
 
         random_coauthor_amazon_splits(self, self.num_classes, lcc_mask=None)

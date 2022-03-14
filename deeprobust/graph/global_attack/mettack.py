@@ -43,12 +43,12 @@ class BaseMeta(BaseAttack):
 
     """
 
-    def __init__(self, model=None, nnodes=None, feature_shape=None, lambda_=0.5, attack_structure=True, attack_features=False, undirected=True, device='cpu'):
+    def __init__(self, model=None, nnodes=None, feature_shape=None, lambda_=0.5, attack_structure=True, attack_features=False, undirected=True, device='cpu'):#模型，维数，特征维数，
 
         super(BaseMeta, self).__init__(model, nnodes, attack_structure, attack_features, device)
         self.lambda_ = lambda_
 
-        assert attack_features or attack_structure, 'attack_features or attack_structure cannot be both False'
+        assert attack_features or attack_structure, 'attack_features or attack_structure cannot be both False' #攻击特征还是攻击结构
 
         self.modified_adj = None
         self.modified_features = None
@@ -84,7 +84,7 @@ class BaseMeta(BaseAttack):
     def filter_potential_singletons(self, modified_adj):
         """
         Computes a mask for entries potentially leading to singleton nodes, i.e. one of the two nodes corresponding to
-        the entry have degree 1 and there is an edge between the two nodes.
+        the entry have degree 1 and there is an edge between the two nodes.为可能导致单例节点的条目计算掩码，例如，与条目相对应的两个节点中的一个具有1度，并且两个节点之间有一条边。
         """
 
         degrees = modified_adj.sum(0)
@@ -97,7 +97,7 @@ class BaseMeta(BaseAttack):
         return flat_mask
 
     def self_training_label(self, labels, idx_train):
-        # Predict the labels of the unlabeled nodes to use them for self-training.
+        # Predict the labels of the unlabeled nodes to use them for self-training.预测未标记节点的标签，以便使用它们进行自我训练。
         output = self.surrogate.output
         labels_self_training = output.argmax(1)
         labels_self_training[idx_train] = labels[idx_train]
@@ -107,7 +107,7 @@ class BaseMeta(BaseAttack):
     def log_likelihood_constraint(self, modified_adj, ori_adj, ll_cutoff):
         """
         Computes a mask for entries that, if the edge corresponding to the entry is added/removed, would lead to the
-        log likelihood constraint to be violated.
+        log likelihood constraint to be violated.为条目计算掩码，如果条目对应的边被添加/删除，将导致违反对数似然约束。
 
         Note that different data type (float, double) can effect the final results.
         """
@@ -323,7 +323,7 @@ class Metattack(BaseMeta):
             unlabeled nodes indices
         n_perturbations : int
             Number of perturbations on the input graph. Perturbations could
-            be edge removals/additions or feature removals/additions.
+            be edge removals/additions or feature removals/additions.攻击数目
         ll_constraint: bool
             whether to exert the likelihood ratio test constraint
         ll_cutoff : float

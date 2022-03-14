@@ -39,7 +39,7 @@ class Dataset():
 
     Examples
     --------
-	We can first create an instance of the Dataset class and then take out its attributes.
+	We can first create an instance of the Dataset class and then take out its attributes.对象和属性
 
 	>>> from deeprobust.graph.data import Dataset
 	>>> data = Dataset(root='/tmp/', name='cora', seed=15)
@@ -124,7 +124,7 @@ class Dataset():
                     stable Internet connection and enter the right name")
 
     def download_npz(self):
-        """Download adjacen matrix npz file from self.url.
+        """Download adjacen matrix npz file from self.url.邻接矩阵
         """
         print('Downloading from {} to {}'.format(self.url, self.data_filename))
         try:

@@ -5,7 +5,7 @@ from deeprobust.graph.global_attack import BaseAttack
 
 class DICE(BaseAttack):
     """As is described in ADVERSARIAL ATTACKS ON GRAPH NEURAL NETWORKS VIA META LEARNING (ICLR'19),
-    'DICE (delete internally, connect externally) is a baseline where, for each perturbation,
+    'DICE (delete internally, connect externally) is a baseline where, for each perturbation,每次扰动随机选择插入或移除边，从相同的类中移除，不同类之间的插入边进行攻击
     we randomly choose whether to insert or remove an edge. Edges are only removed between
     nodes from the same classes, and only inserted between nodes from different classes.
 
@@ -43,7 +43,7 @@ class DICE(BaseAttack):
 
     def attack(self, ori_adj, labels, n_perturbations, **kwargs):
         """Delete internally, connect externally. This baseline has all true class labels
-        (train and test) available.
+        (train and test) available.所有的true类标签都可以访问
 
         Parameters
         ----------
@@ -88,7 +88,7 @@ class DICE(BaseAttack):
             candidate_edges = np.array([np.random.choice(ori_adj.shape[0], n_remaining),
                                         np.random.choice(ori_adj.shape[0], n_remaining)]).T
 
-            # filter out existing edges, and pairs with the different labels
+            # filter out existing edges, and pairs with the different labels 过滤掉现有的边，并与不同的标签配对
             candidate_edges = set([(u, v) for u, v in candidate_edges if labels[u] != labels[v]
                                         and modified_adj[u, v] == 0 and modified_adj[v, u] == 0])
             candidate_edges = np.array(list(candidate_edges))

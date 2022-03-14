@@ -42,7 +42,7 @@ class BaseAttack(Module):
             self.hidden_sizes = model.hidden_sizes
 
     def attack(self, ori_adj, n_perturbations, **kwargs):
-        """Generate attacks on the input graph.
+        """Generate attacks on the input graph.对输入图发起攻击
 
         Parameters
         ----------
@@ -59,14 +59,14 @@ class BaseAttack(Module):
         pass
 
     def check_adj(self, adj):
-        """Check if the modified adjacency is symmetric and unweighted.
+        """Check if the modified adjacency is symmetric and unweighted. 邻接图是否对称和无权
         """
         assert np.abs(adj - adj.T).sum() == 0, "Input graph is not symmetric"
         assert adj.tocsr().max() == 1, "Max value should be 1!"
         assert adj.tocsr().min() == 0, "Min value should be 0!"
 
     def check_adj_tensor(self, adj):
-        """Check if the modified adjacency is symmetric, unweighted, all-zero diagonal.
+        """Check if the modified adjacency is symmetric, unweighted, all-zero diagonal.邻接图是否对称和无权，对角矩阵
         """
         assert torch.abs(adj - adj.t()).sum() == 0, "Input graph is not symmetric"
         assert adj.max() == 1, "Max value should be 1!"
@@ -103,7 +103,7 @@ class BaseAttack(Module):
             sp.save_npz(osp.join(root, name), modified_adj)
 
     def save_features(self, root=r'/tmp/', name='mod_features'):
-        """Save attacked node feature matrix.
+        """Save attacked node feature matrix.被攻击后节点的特征矩阵
 
         Parameters
         ----------
