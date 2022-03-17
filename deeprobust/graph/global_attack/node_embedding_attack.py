@@ -94,11 +94,11 @@ class NodeEmbeddingAttack(BaseAttack):
             top_flips = candidates_add[loss_argsort[:n_perturbations]]
 
         else:
-            # vector indicating whether we are adding an edge (+1) or removing an edge (-1)
+            # vector indicating whether we are adding an edge (+1) or removing an edge (-1) # vector表示是添加边(+1)还是删除边(-1)
             delta_w = 1 - 2 * adj[candidates[:, 0], candidates[:, 1]].A1
 
-            # generalized eigenvalues/eigenvectors
-            deg_matrix = np.diag(adj.sum(1).A1)
+            # generalized eigenvalues/eigenvectors 广义特征值，特征向量
+            deg_matrix = np.diag(adj.sum(1).A1)#转换为对角矩阵 https://numpy.org/doc/stable/reference/generated/numpy.matrix.html解释了A1是将矩阵扁平化
             vals_org, vecs_org = spl.eigh(adj.toarray(), deg_matrix)
 
             loss_for_candidates = estimate_loss_with_delta_eigenvals(candidates, delta_w, vals_org, vecs_org, n_nodes, dim, window_size)

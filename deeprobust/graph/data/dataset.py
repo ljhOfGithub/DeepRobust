@@ -66,7 +66,7 @@ class Dataset():
         self.data_filename = self.data_folder + '.npz'
         self.require_mask = require_mask
 
-        self.require_lcc = False if setting == 'gcn' else True
+        self.require_lcc = False if setting == 'gcn' else True#如果不是gcn则需要取最大连通子图
         self.adj, self.features, self.labels = self.load_data()
 
         if setting == 'prognn':
@@ -220,10 +220,10 @@ class Dataset():
 
         if self.require_lcc:
             lcc = self.largest_connected_components(adj)
-            adj = adj[lcc][:, lcc]
+            adj = adj[lcc][:, lcc]#只保留最大连通子图的节点
             features = features[lcc]
             labels = labels[lcc]
-            assert adj.sum(0).A1.min() > 0, "Graph contains singleton nodes"
+            assert adj.sum(0).A1.min() > 0, "Graph contains singleton nodes"#图不能包含孤立节点
 
         # whether to set diag=0?
         adj.setdiag(0)
@@ -259,7 +259,7 @@ class Dataset():
         features = sp.csr_matrix(features, dtype=np.float32)
         return adj, features, labels
 
-    def largest_connected_components(self, adj, n_components=1):
+    def largest_connected_components(self, adj, n_components=1):#用邻接矩阵找最大连接子图
         """Select k largest connected components.
 
 		Parameters
@@ -270,11 +270,11 @@ class Dataset():
 			n largest connected components we want to select
 		"""
 
-        _, component_indices = sp.csgraph.connected_components(adj)
-        component_sizes = np.bincount(component_indices)
-        components_to_keep = np.argsort(component_sizes)[::-1][:n_components]  # reverse order to sort descending
+        _, component_indices = sp.csgraph.connected_components(adj)#使用sp的接口找稀疏矩阵的连通子图，获取子图索引，将有向图转换为无向图找弱连通子图
+        component_sizes = np.bincount(component_indices)#计算连通子图个数
+        components_to_keep = np.argsort(component_sizes)[::-1][:n_components]  # reverse order to sort descending 倒序
         nodes_to_keep = [
-            idx for (idx, component) in enumerate(component_indices) if component in components_to_keep]
+            idx for (idx, component) in enumerate(component_indices) if component in components_to_keep]#选择最大连通子图的节点
         print("Selecting {0} largest connected components".format(n_components))
         return nodes_to_keep
 
